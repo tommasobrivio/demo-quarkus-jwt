@@ -30,15 +30,12 @@ public class ApplicationUser {
     private String role;
 
     @Column(name = "FirstName", length = 100, nullable = false)
-    @Roles
     private String firstName;
 
     @Column(name = "SecondName", length = 100, nullable = false)
-    @Roles
     private String secondName;
 
     @Column(name = "Address", nullable = false)
-    @Roles
     private String address;
 
     public ApplicationUser() {
