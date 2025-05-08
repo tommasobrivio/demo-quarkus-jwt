@@ -1,5 +1,7 @@
 package it.itsincom.webdevd.web;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -10,6 +12,7 @@ public class ProtectedResource {
 
     @GET
     @Path("/admin")
+    @RolesAllowed("ADMIN")
     @Produces(MediaType.TEXT_PLAIN)
     public String onlyForAdmins() {
         return "Only for admins!";
@@ -17,6 +20,7 @@ public class ProtectedResource {
 
     @GET
     @Path("/user")
+    @RolesAllowed({"USER"})
     @Produces(MediaType.TEXT_PLAIN)
     public String onlyForUsers() {
         return "Only for users!";
@@ -24,6 +28,7 @@ public class ProtectedResource {
 
     @GET
     @Path("/all")
+    @PermitAll
     @Produces(MediaType.TEXT_PLAIN)
     public String forEveryone() {
         return "For everyone!";

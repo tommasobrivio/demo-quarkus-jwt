@@ -35,6 +35,13 @@ public class UserService {
 
     }
 
+    public UserResponse authenticate(String username, String password) {
+        ApplicationUser user = userRepository.authenticate(username, password);
+        if (user != null) {
+            return toUserResponse(user);
+        }
+        return null;
+    }
 
     public List<UserResponse> findAll() {
         List<ApplicationUser> allUsers = userRepository.findAll(Sort.by("username"))
@@ -54,4 +61,7 @@ public class UserService {
         );
     }
 
+    public UserResponse getUserByUsername(String username) {
+        return toUserResponse(userRepository.findByUsername(username));
+    }
 }
