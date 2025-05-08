@@ -7,7 +7,7 @@ import it.itsincom.webdevd.persistence.model.ApplicationUser;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class UserRepository implements PanacheRepositoryBase<ApplicationUser, Long> {
+public class UserRepository implements PanacheRepositoryBase<ApplicationUser, Integer> {
     public ApplicationUser authenticate(String username, String password) {
         ApplicationUser applicationUser = findByUsername(username);
         if (applicationUser != null) {

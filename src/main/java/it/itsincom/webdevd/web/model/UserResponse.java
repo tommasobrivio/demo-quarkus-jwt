@@ -3,14 +3,14 @@ package it.itsincom.webdevd.web.model;
 import it.itsincom.webdevd.persistence.model.UserRole;
 
 public class UserResponse {
-    private long id;
+    private int id;
     private String username;
     private String role;
     private String firstName;
     private String secondName;
     private String address;
 
-    public UserResponse(long id, String username, String role, String firstName, String secondName, String address) {
+    public UserResponse(int id, String username, String role, String firstName, String secondName, String address) {
         this.id = id;
         this.username = username;
         this.role = role;
@@ -19,11 +19,11 @@ public class UserResponse {
         this.address = address;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
