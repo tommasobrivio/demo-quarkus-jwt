@@ -31,12 +31,26 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
+    public List<UserResponse> stampAll() {
+            return userService.findAll();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     @Path("/{id}")
-    public List<UserResponse> findAll(@PathParam("id") String id) {
-        return userService.findAll();
+    public UserResponse stampById(@PathParam("id") String id) {
+        return userService.findById(Long.parseLong(id));
     }
 
     //modifica(PUT "/{id}") con id obbligatorio, se ruolo user e id è il suo, se admin non si controlla id
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
+    @Path("/{id}")
+    public UserResponse update(@PathParam("id") String id, CreateUserRequest request) {
+        return null;
+    }
 
     //elimina solo se admin, id obbligatorio
 }
