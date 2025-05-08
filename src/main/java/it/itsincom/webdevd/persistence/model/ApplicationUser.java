@@ -8,7 +8,7 @@ import io.quarkus.security.jpa.Username;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "User")
+@Table(name = "[User]")
 @UserDefinition
 public class ApplicationUser {
 

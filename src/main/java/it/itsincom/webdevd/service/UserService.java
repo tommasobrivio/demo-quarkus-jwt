@@ -1,5 +1,6 @@
 package it.itsincom.webdevd.service;
 
+import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
@@ -25,9 +26,11 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(CreateUserRequest request) {
+        String hash = BcryptUtil.bcryptHash(request.getPassword());
+
         ApplicationUser user = new ApplicationUser(
                 request.getUsername(),
-                request.getPassword(),
+                hash,
                 request.getRole().toString(),
                 request.getFirstName(),
                 request.getSecondName(),
