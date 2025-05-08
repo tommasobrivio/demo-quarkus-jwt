@@ -26,7 +26,10 @@ public class UserService {
         ApplicationUser user = new ApplicationUser(
                 request.getUsername(),
                 request.getPassword(),
-                request.getRole()
+                request.getRole().toString(),
+                request.getFirstName(),
+                request.getSecondName(),
+                request.getAddress()
         );
 
         userRepository.persist(user);
@@ -57,7 +60,10 @@ public class UserService {
         return new UserResponse(
                 user.getId(),
                 user.getUsername(),
-                user.getRole()
+                user.getRole(),
+                user.getFirstName(),
+                user.getSecondName(),
+                user.getAddress()
         );
     }
 

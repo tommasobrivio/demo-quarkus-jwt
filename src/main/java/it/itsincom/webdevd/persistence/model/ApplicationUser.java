@@ -8,36 +8,50 @@ import io.quarkus.security.jpa.Username;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "application_user")
+@Table(name = "User")
 @UserDefinition
 public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "Id")
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "Username", length = 100, unique = true, nullable = false)
     @Username
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "Password", nullable = false)
     @Password
     private String password;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "Role", length = 100, nullable = false)
     @Roles
     private String role;
+
+    @Column(name = "FirstName", length = 100, nullable = false)
+    @Roles
+    private String firstName;
+
+    @Column(name = "SecondName", length = 100, nullable = false)
+    @Roles
+    private String secondName;
+
+    @Column(name = "Address", nullable = false)
+    @Roles
+    private String address;
 
     public ApplicationUser() {
     }
 
-    public ApplicationUser(String username, String password, UserRole role) {
+    public ApplicationUser(String username, String password, String role, String firstName, String secondName, String address) {
         this.username = username;
-        this.password = BcryptUtil.bcryptHash(password);
-        this.role = role.name();
+        this.password = password;
+        this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.address = address;
     }
-
 
     public Long getId() {
         return id;
@@ -70,4 +84,16 @@ public class ApplicationUser {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getFirstName() { return firstName; }
+
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getSecondName() { return secondName; }
+
+    public void setSecondName(String secondName) { this.secondName = secondName; }
+
+    public String getAddress() { return address; }
+
+    public void setAddress(String address) { this.address = address; }
 }

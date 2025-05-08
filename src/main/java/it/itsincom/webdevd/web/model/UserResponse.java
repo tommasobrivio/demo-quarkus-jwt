@@ -6,11 +6,17 @@ public class UserResponse {
     private long id;
     private String username;
     private String role;
+    private String firstName;
+    private String secondName;
+    private String address;
 
-    public UserResponse(long id, String username, String role) {
+    public UserResponse(long id, String username, String role, String firstName, String secondName, String address) {
         this.id = id;
         this.username = username;
         this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.address = address;
     }
 
     public long getId() {
@@ -35,5 +41,29 @@ public class UserResponse {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
