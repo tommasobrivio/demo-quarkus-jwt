@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -42,7 +43,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
     public List<UserResponse> stampAll() {
-            return userService.findAll();
+        return userService.findAll();
     }
 
     @GET
@@ -59,21 +60,21 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/{id}")
-    public boolean update(
+    public Response update(
             @PathParam("id") int id,
             ApplicationUser modifiedUser
     ) {
         Set<String> groups = jwt.getGroups();
         System.out.println(groups);
         boolean response = false;
-        if(modifiedUser.getId() == id && groups.contains("USER")) {
-            System.out.println(modifiedUser.getId());
-            System.out.println(id);
-            response = userService.updateUser(id, modifiedUser);
-        } else if(groups.contains("ADMIN")) {
-            response = userService.updateUser(id, modifiedUser);
+
+        if (modifiedUser.getId() != id && groups.contains("USER")) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        return response;
+
+        response = userService.updateUser(id, modifiedUser);
+
+        return Response.ok(response).build();
     }
 
     //elimina solo se admin, id obbligatorio
