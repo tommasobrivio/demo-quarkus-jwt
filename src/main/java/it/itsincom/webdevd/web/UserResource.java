@@ -30,14 +30,14 @@ public class UserResource {
     //diventa stampa con id facoltativo
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"ADMIN", "USER"})
     public List<UserResponse> stampAll() {
             return userService.findAll();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"ADMIN", "USER"})
     @Path("/{id}")
     public UserResponse stampById(@PathParam("id") String id) {
         return userService.findById(Long.parseLong(id));
@@ -46,7 +46,7 @@ public class UserResource {
     //modifica(PUT "/{id}") con id obbligatorio, se ruolo user e id è il suo, se admin non si controlla id
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"ADMIN", "USER"})
     @Path("/{id}")
     public UserResponse update(@PathParam("id") String id, CreateUserRequest request) {
         return null;
