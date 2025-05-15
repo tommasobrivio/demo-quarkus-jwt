@@ -6,6 +6,7 @@ import it.itsincom.webdevd.persistence.model.ApplicationUser;
 import it.itsincom.webdevd.service.UserService;
 import it.itsincom.webdevd.web.model.CreateUserRequest;
 import it.itsincom.webdevd.web.model.UserResponse;
+import jakarta.annotation.security.DenyAll;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @Path("/user")
+@DenyAll
 public class UserResource {
 
     private final UserService userService;
@@ -68,7 +70,7 @@ public class UserResource {
         System.out.println(groups);
         boolean response = false;
 
-        if (modifiedUser.getId() != id && groups.contains("USER")) {
+        if (id != Integer.parseInt(jwt.getSubject()) && groups.contains("USER")) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 

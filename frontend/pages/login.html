@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="../script/jwtDecode.js"></script>
+    <script>
+
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if(!username || !password){
+                alert("Username o password mancano");
+            }
+
+            const response = await fetch("http://localhost:8080/auth/login",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({
+                    "username": username,
+                    "password": password
+                })
+            });
+
+            if(!response.ok){
+                throw(new Error("Errore nella login."))
+            }
+            else{
+                const data = await response.json();
+                const decoded = jwtDecode(data.accessToken);
+                console.log( data.accessToken)
+                localStorage.setItem("accessToken", data.accessToken);
+                localStorage.setItem("refreshToken", data.refreshToken);
+
+                if(decoded.groups.indexOf("ADMIN") >= 0 ){
+                    window.location.href = "admin.html";
+                }
+                else{
+                    window.location.href = "user.html";
+                }
+
+            }
+        }
+
+        function setSubmit(){
+            const form = document.querySelector("form");
+            form.onsubmit = function (e) {
+                e.preventDefault();
+                login();
+            };
+        }
+    </script>
+</head>
+<body onload="setSubmit()">
+    <div>
+        <form>
+            <label for="username">
+                Username: <input type="text" id="username">
+            </label>
+            <label for="password">
+                Password: <input type="text" id="password">
+            </label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

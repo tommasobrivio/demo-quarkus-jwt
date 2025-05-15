@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <script src="../script/jwtDecode.js"></script>
+
+    <script>
+
+        function setPersonalDetails(user){
+            document.getElementById("username").value = user.username;
+            document.getElementById("password").value = ""; 
+            document.getElementById("passwordConfirmed").value = "";
+            document.getElementById("firstName").value = user.firstName;
+            document.getElementById("secondName").value = user.secondName;
+            document.getElementById("address").value = user.address;
+            document.getElementById("modifyPersonalDetailsBtn").onclick = () => modifyPersonalDetails(user.id);
+        }
+
+        function createTable(users, decoded){
+            const table = document.getElementById("allDetails");
+            table.innerHTML = "";
+
+            users.forEach(user => {
+                if(user.id == decoded.sub){
+                    setPersonalDetails(user);
+                }
+
+                const tr = document.createElement("tr");
+
+                const usernameTd = document.createElement("td");
+                usernameTd.textContent = user.username;
+                tr.appendChild(usernameTd);
+
+                const firstNameTd = document.createElement("td");
+                firstNameTd.textContent = user.firstName;
+                tr.appendChild(firstNameTd);
+
+                const secondNameTd = document.createElement("td");
+                secondNameTd.textContent = user.secondName;
+                tr.appendChild(secondNameTd);
+
+                const addressTd = document.createElement("td");
+                addressTd.textContent = user.address;
+                tr.appendChild(addressTd);
+
+                const roleTd = document.createElement("td");
+                roleTd.textContent = user.role;
+                tr.appendChild(roleTd);
+
+                const modifyButton = document.createElement("button");
+                modifyButton.onclick = () => modify(user.id);
+                modifyButton.textContent = "Modifica";
+                tr.appendChild(modifyButton);
+
+                table.appendChild(tr);
+            });
+        }
+
+        async function loadData() {
+            const accessToken = localStorage.getItem("accessToken");
+            const decoded = jwtDecode(accessToken);
+
+            const response = await fetch("http://localhost:8080/user", {    
+                method: "GET",
+                headers:{
+                    "Authorization": "Bearer " + accessToken
+                }
+            });
+
+            if(response.status == 401){
+                const refreshResponse = await fetch("http://localhost:8080/auth/refresh",{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("refreshToken")
+                    }
+                })
+
+                if(!refreshResponse.ok){
+                    window.location.href = "login.html";
+                }
+                else{
+                    const newData = await refreshResponse.json();
+                    localStorage.setItem("accessToken", newData.accessToken);
+                    await loadData();
+                }
+            }
+            const data = await response.json();
+            createTable(data, decoded);
+        }
+    </script>
+</head>
+<body onload="loadData()">
+
+    <a href="addUser.html">Aggiungi un nuovo user</a>
+
+    <div id="personalDetails">
+        <label for="username">Username:
+            <input type="text" id="username">
+        </label>
+
+        <label for="password">Nuova password:
+            <input type="text" id="password">
+        </label>
+
+        <label for="passwordConfirmed">Conferma nuova password:
+            <input type="text" id="passwordConfirmed">
+        </label>
+
+        <label for="firstName">Nome:
+            <input type="text" id="firstName">
+        </label>
+
+        <label for="secondName">Cognome:
+            <input type="text" id="secondName">
+        </label>
+
+        <label for="address">Indirizzo: 
+            <input type="text" id="address">
+        </label>
+    
+        <button id="modifyPersonalDetailsBtn">Modifica</button>
+    </div>
+    
+    <div>
+        <table>
+            <thead>
+                <th>Username</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Indirizzo</th>
+                <th>Ruolo</th>
+                <th></th>
+            </thead>
+            <tbody id="allDetails"></tbody>
+        </table>
+    </div>
+</body>
+</html>
