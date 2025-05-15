@@ -15,7 +15,7 @@ public class ApplicationUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "Username", length = 100, unique = true, nullable = false)
     @Username
@@ -50,11 +50,11 @@ public class ApplicationUser {
         this.address = address;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
